@@ -1,0 +1,16 @@
+*.pyc
+*.versionsBackup
+*.swp
+*.iml
+*.ipr
+*.iws
+.idea/
+*.class
+target/
+.DS_store
+.project
+.settings
+.classpath
+.metadata
+.DS_Store
+

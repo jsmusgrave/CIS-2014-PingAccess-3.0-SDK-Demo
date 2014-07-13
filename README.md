@@ -6,14 +6,11 @@ PingAccess 3.0 SDK Sample for cloudidentitysummit.com 2014.
 Overview
 --------
 This is a sample for a live code demo at [cloudidentitysummit.com 2014][CIS2014].  It uses the PingAccess SDK and 
-therefore requires access to the internet.  If you don't have internet access, but have access to the PingAccess install
-you can [use this alternative.](has-no-tubes)
+therefore requires access to the internet.  If you don't have internet access, but have access to the PingAccess install you can [use this alternative.](has-no-tubes)
 
 Objective
 ---------
-Create a Rule using the PingAccess SDK that only allows certain User-Agents.  Define a single text field that can be 
-used as a Regex to validate the User-Agent field.
-
+Create a Rule using the PingAccess SDK that only allows access to requests with matching [User-Agents][userAgent] defined.  The rule UI will contain a single text field that can be used as a Regex to validate the User-Agent field.
 
 Prerequisites
 -------------
@@ -26,21 +23,19 @@ To build this sample, you need to have the following installed:
 Begin
 -----
 
-1. Clone this repository (if you haven't already.)  We start with a maven pom referencing the PingAccess SDK.
+1. Clone this repository (if you haven't already.)  We start with a maven pom referencing the PingAccess SDK.  The repo starts out complete
 
-1. To create a Rule the first step is to create a Class that implements the *com.pingidentity.pa.sdk.policy.RuleInterceptor*.
-To simplify building rules, a base class is provided: *com.pingidentity.pa.sdk.policy.RuleInterceptorBase* that should be used for this demo.  
+1. By default this repository's master is complete and working.  That's no way to begin a sample if you're going to work though it!  Let's revert by checking out the BEGIN branch.
 
-The class should be named: com.pingidentity.pa.sample.SampleRule
+		$git checkout BEGIN
 
-default the method implementations, we'll revisit these later.
+1. Examine the Rule class.  Now we see that the Rule has been mostly blanked out.  It's just a simple Rule that extends *com.pingidentity.pa.sdk.policy.RuleInterceptorBase*.  *RuleInterceptorBase* is a simple base class to simplify, you don't have to extend it and could merely implement the interface *com.pingidentity.pa.sdk.policy.RuleInterceptor*.  The class is named: com.pingidentity.pa.sample.SampleRule and has ide generated default the method implementations, we'll revisit these later.
 
-1. Next the Services file should be defined.  To do this, create a file with the same name as the SPI interface like the following: 
-
+1. Examine the Services file.  It is already defined for you, but if you needed to create on,  you would create a file with the same name as the SPI interface like the following: 
  
-    <GITREPO>/src/main/resources/META-INF/services/com.pingidentity.pa.sdk.policy.RuleInterceptor
+	    <GITREPO>/src/main/resources/META-INF/services/com.pingidentity.pa.sdk.policy.RuleInterceptor
     
-    In that file you should include the name of the implementation class: *com.pingidentity.pa.sample.SampleRule*
+    That file includes the name of the implementation class: *com.pingidentity.pa.sample.SampleRule*
    
 1. The Rule also needs a Descriptor.  It should be annotated with the *@Rule* annotation (*com.pingidentity.pa.sdk.policy.Rule*).  
 At a minimum, the *type* and *label* should be defined.  The *type* should be a unique String with no white space.  The *Label* 
@@ -213,4 +208,5 @@ Apache Maven [is available here][maven]
 
 [maven]: http://maven.apache.org/download.html
 [CIS2014]: http://www.cloudidentitysummit.com/events/cloud-identity-summit-2014/event-summary-e09252dca9f144cbbd77691980893949.aspx
+[userAgent]:	http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.43
 

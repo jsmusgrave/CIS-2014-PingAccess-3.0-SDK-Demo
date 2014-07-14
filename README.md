@@ -40,22 +40,22 @@ Begin
     
     That file includes the name of the implementation class: *com.pingidentity.pa.sample.SampleRule*
    
-1. The Rule also needs a Descriptor.  It should be annotated with the *@Rule* annotation (*com.pingidentity.pa.sdk.policy.Rule*).  
+1. Add a Rule Descriptor.  Rules should be annotated with the *@Rule* annotation (*com.pingidentity.pa.sdk.policy.Rule*).  
 At a minimum, the *type* and *label* should be defined.  The *type* should be a unique String with no white space.  The *Label* 
  is the text label for the Rule.
  
 
     @Rule(type = "SampleRule", label = "SampleRule") 
     
-1. Next let's start implementing methods and build the UI.  The easiest way to do build a class and use annotations on that
-class to drive the UI as well as use it to bind to the configuration.  
+1. Next let's start implementing methods that build the UI and accept configuration from the UI.  The easiest way to do build a class and use annotations on that
+class to drive the UI as well as tell PingAccess to bind the incoming configuration data to it.
 
 1. Define a public static nested class that extends *com.pingidentity.pa.sdk.policy.SimplePluginConfiguration*.  
 Since every Rule must include at least one UI field, let's add a public String field for the regex to match.
 
         public String validUserAgentRegex = null;
 
-1. To make that field something that renders a UI element on the screen add a *com.pingidentity.pa.sdk.ui.UIElement* annotation.  
+1. Annotate the field with the *com.pingidentity.pa.sdk.ui.UIElement* annotation.  This indicates that the field will be part of the UI. 
 The *label* defines the UI label for this field.  The *type* determines what sort of UI field will be rendered. 
 The *order* defines the order of the UI Elements on the screen, since there's only one field, 0 is a perfectly fine value.
 
@@ -65,13 +65,14 @@ The *order* defines the order of the UI Elements on the screen, since there's on
                 help = @Help(title = "This is a Regex for the allowable User Agents")
         )
 
-1. Since we need this value to be defined and valid, we use constraints from *javax.validation* to validate the field.
-    Annotate with javax.validation.constraints.NotNull and the included annotation  *com.pingidentity.pa.sample.Regex*.
-    
+1. Apply Validation to the field.  Since we need this field to be defined and valid, we use constraints from *javax.validation* to validate the field.
+    Annotate with *javax.validation.constraints.NotNull*, *javax.validation.constraints.Size* and the included annotation  *com.pingidentity.pa.sample.Regex*.
+            
+            @Size(min = 1, max = 256)
             @NotNull(message="Please provide a Regex")
             @Regex(message="Not a valid Regex")
     
-1. Next, we need to compile and the cache the regex pattern.  In the *Configuration* class, let's define a member to cache the Pattern and 
+1.  Compile and the cache the regex pattern.  In the *Configuration* class, let's define a member to cache the Pattern and 
     a method to initialize and acquire it.  (We will call this method later and at a particular time in the life cycle.)
     
             Pattern pattern;
@@ -83,9 +84,9 @@ The *order* defines the order of the UI Elements on the screen, since there's on
                 return pattern;
             }
 
-1.  The way we communicate the UI to PingAccess is by implementing the *public List<ConfigurationField> getConfigurationFields()* on the Rule.
-    There are a couple ways to build the list of ConfigurationFields, but the easiest and preferred is to use the fluent interface provided by *ConfigurationBuilder* 
-    to extract the list from the Annotated fields defined on the *Configuration* like so: 
+1.  Implement *public List<ConfigurationField> getConfigurationFields()*  This method is used to describe the UI via providing  a list of *ConfigurationField*.
+    There are a couple ways to build the list, but the easiest and preferred is to use the fluent interface provided by *ConfigurationBuilder* 
+    to extract the list from the Annotated fields defined on the *Configuration* class like so: 
          
          @Override
          public List<ConfigurationField> getConfigurationFields() {
@@ -94,8 +95,8 @@ The *order* defines the order of the UI Elements on the screen, since there's on
                 .toConfigurationFields();
          }
     
-1. In addition to describing the UI we need to accept configuration from the UI.  The first step is to tell the framework
-that you expect to be passed the *Configuration* object.  This is neccessary because PA will try to map the information 
+1. Define the expected configuration.  In addition to describing the UI we need to accept configuration from the UI.  The first step is to tell the framework
+that you expect to be passed the *Configuration* object.  This is necessary because PA will try to map the information 
 provided by the UI--which arrives in the form of JSON at the Rules REST service--to whatever class you tell it to use.
 We simply override the default *expectedConfiguration* attribute on the *Rule* annotation.
     
@@ -106,7 +107,7 @@ We simply override the default *expectedConfiguration* attribute on the *Rule* a
         public class SampleRule extends RuleInterceptorBase<SampleRule.Configuration>
         
         
-1. Now PA will render the UI with the *Configuration* class and provide the Rule with a valid instance (assuming the user 
+1.  Now PA will render the UI with the *Configuration* class and provide the Rule with a valid instance (assuming the user 
     submits valid data.)  Since we extended *RuleInterceptorBase* we have a default implementation of the *configure* and
     *getConfiguration* methods.  We're going to to override the *configure* method to take advantage of the fact that it 
     is called exactly once before a given Rule is made available to handle requests.  This gives us a handy place to
@@ -120,7 +121,7 @@ We simply override the default *expectedConfiguration* attribute on the *Rule* a
             getConfiguration().getPattern();
         }
         
-1. Rules may be called upon to perform Error Handling.  This usually happens when one of the Rules being evaluated for a 
+1. Rules may be called upon to perform Error Handling.  This happens when one of the Rules being evaluated for a 
     request--not necessarily this rule--throws an AccessException from its HandleRequest method.  We're choosing a simple 
     implementation here.
     
@@ -129,11 +130,11 @@ We simply override the default *expectedConfiguration* attribute on the *Rule* a
             return new InternalServerErrorCallback();
         }
         
-1. We're almost ready to perform the actual *handleRequest* method.  First let's create a SLF4J logger to use for debugging.
+1. Create a SLF4J logger to use for debugging.
     
         Logger log = LoggerFactory.getLogger(SampleRule.class);
         
-1. Now we can implement HandleRequest.  We need to get the Header from the exchange and get the value of any "User-Agent" 
+1. Implement *handleRequest*.  We need to get the Header from the exchange and get the value of any "User-Agent" 
 HeaderField if it is present.  There should only be one value, so we get the last value.  Next we build a matcher from the
 compiled Pattern and see if the provided "User-Agent" header matches the provided pattern.  And we throw in a bunch of logging
 so we can see what's going on.

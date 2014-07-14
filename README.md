@@ -1,6 +1,9 @@
 CIS-2014-PingAccess-3.0-SDK-Demo
 ================================
 
+IN PROGRESS, Will be complete by 7/19/2014.
+==========
+
 PingAccess 3.0 SDK Sample for cloudidentitysummit.com 2014.
 
 Overview

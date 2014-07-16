@@ -192,7 +192,7 @@ http://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.h
 
 You may have used git to get access to this.  Otherwise, git is available [here][git-downloads].
 
-###  Apache Maven [apache-maven]
+###  <a name="apache-maven></a> Apache Maven
 
 The sample uses Apache Maven and assumes that the PingAccess SDK can be
 referenced as a dependency.  It references PingIdentity's public maven

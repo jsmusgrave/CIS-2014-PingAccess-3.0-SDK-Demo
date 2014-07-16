@@ -9,7 +9,7 @@ PingAccess 3.0 SDK Sample for cloudidentitysummit.com 2014.
 Overview
 --------
 This is a sample for a live code demo at [cloudidentitysummit.com 2014][CIS2014].  It uses the PingAccess SDK and 
-therefore requires access to the internet.  If you don't have internet access, but have access to the PingAccess install you can [use this alternative.](has-no-tubes)
+therefore requires access to the internet.  If you don't have internet access, but have access to the PingAccess install you can [use this alternative.][has-no-tubes]
 
 Objective
 ---------
@@ -19,9 +19,9 @@ Prerequisites
 -------------
 To build this sample, you need to have the following installed:
 
-* [Maven 3.x](apache-maven)
-* [Git 1.8.x](git)
-* [Java 7](java)
+* [Maven 3.x][apache-maven]
+* [Git 1.8.x][git]
+* [Java 7][java]
 
 Begin
 -----
@@ -162,13 +162,13 @@ so we can see what's going on.
 
 ## Appendix
 
-### (has-no-tubes) No Internet Access
+###  No Internet Access [has-no-tubes] 
 
 If internet access is unavailable, there are two other ways to reference the 
 PingAccess SDK.  First, once Apache Maven is installed, install the sdk into
 your local dependency repository by running the following command:
 
-   mvn install:install-file -Dfile=<PATH_TO_PA_INSTALL>/lib/pingaccess-sdk-3.0.0.jar -DgroupId=com.pingidentity.pingaccess -DartifactId=pingaccess-sdk -Dversion=3.0.0 -Dpackaging=jar
+   	mvn install:install-file -Dfile=<PATH_TO_PA_INSTALL>/lib/pingaccess-sdk-3.0.0.jar -DgroupId=com.pingidentity.pingaccess -DartifactId=pingaccess-sdk -Dversion=3.0.0 -Dpackaging=jar
 
 Alternatively, you can update the pingaccess-sdk dependancy to point to
 the local installation.
@@ -184,27 +184,25 @@ the local installation.
 With either of these options, replace `<PATH_TO_PA_INSTALL>` with the path to the 
 PA installation.
 
-### <a name="java"></a> Java
+###  Java [java]
 
 http://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.html
 
-### <a name="git"></a> git
+### git [git]
 
-You may have used git to get access to this.  Otherwise, git is available [here](http://git-scm.com/downloads).
+You may have used git to get access to this.  Otherwise, git is available [here][git-downloads].
 
-### <a name="apache-maven></a> Apache Maven
+###  Apache Maven [apache-maven]
 
 The sample uses Apache Maven and assumes that the PingAccess SDK can be
 referenced as a dependency.  It references PingIdentity's public maven
 repository, located at: 
 
-http://maven.pingidentity.com/release
+		http://maven.pingidentity.com/release
 
-Apache Maven [is available here][maven]
+Apache Maven is available [here][maven]
 
-
-### Apache Maven
-
+[git-downloads]: http://git-scm.com/downloads
 [maven]: http://maven.apache.org/download.html
 [CIS2014]: http://www.cloudidentitysummit.com/events/cloud-identity-summit-2014/event-summary-e09252dca9f144cbbd77691980893949.aspx
 [userAgent]:	http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.43

@@ -13,7 +13,7 @@ therefore requires access to the internet.  If you don't have internet access, b
 
 Objective
 ---------
-Create a Rule using the PingAccess SDK that only allows access to requests with matching [User-Agents][userAgent] defined.  The rule UI will contain a single text field that can be used as a Regex to validate the User-Agent field.
+Create a Rule using the PingAccess SDK that only allows access to requests with a [User-Agent][userAgent] header matching a specified regex.  The rule UI will contain a single text field that provides that regex value.
 
 Prerequisites
 -------------
@@ -26,15 +26,15 @@ To build this sample, you need to have the following installed:
 Begin
 -----
 
-1. Clone this repository (if you haven't already.)  We start with a maven pom referencing the PingAccess SDK.  The repo starts out complete
+1. If you have not already done so, clone this repository.  We start with a maven pom referencing the PingAccess SDK.
 
-1. By default this repository's master is complete and working.  That's no way to begin a sample if you're going to work though it!  Let's revert by checking out the BEGIN branch.
+1. By default, this repository's master is complete and working.  That's no way to begin a sample if you're going to work though it!  Let's revert by checking out the BEGIN branch.
 
 		$git checkout BEGIN
 
-1. Examine the Rule class.  Now we see that the Rule has been mostly blanked out.  It's just a simple Rule that extends *com.pingidentity.pa.sdk.policy.RuleInterceptorBase*.  *RuleInterceptorBase* is a simple base class to simplify, you don't have to extend it and could merely implement the interface *com.pingidentity.pa.sdk.policy.RuleInterceptor*.  The class is named: com.pingidentity.pa.sample.SampleRule and has ide generated default the method implementations, we'll revisit these later.
+1. Examine the Rule class.  Now we see that the Rule has been mostly blanked out.  It's just a simple Rule that extends *com.pingidentity.pa.sdk.policy.RuleInterceptorBase*.  *RuleInterceptorBase* is a simple base class - you don't have to extend it, and could merely implement the interface *com.pingidentity.pa.sdk.policy.RuleInterceptor*.  The class we are creating is named *com.pingidentity.pa.sample.SampleRule*, and has ide-generated default method implementations, which we'll revisit later. <JH: Please confirm that this rewrite is correct.>
 
-1. Examine the Services file.  It is already defined for you, but if you needed to create on,  you would create a file with the same name as the SPI interface like the following: 
+1. Examine the Services file.  It is already defined for you, but if you needed to create one, you would create a file with the same name as the SPI interface.  For example: 
  
 	    <GITREPO>/src/main/resources/META-INF/services/com.pingidentity.pa.sdk.policy.RuleInterceptor
     
@@ -44,10 +44,9 @@ Begin
 At a minimum, the *type* and *label* should be defined.  The *type* should be a unique String with no white space.  The *Label* 
  is the text label for the Rule.
  
-
     @Rule(type = "SampleRule", label = "SampleRule") 
     
-1. Next let's start implementing methods that build the UI and accept configuration from the UI.  The easiest way to do build a class and use annotations on that
+1. Next let's start implementing methods that build the UI and accept configuration from the UI.  The easiest way to do this is to build a class and use annotations on that
 class to drive the UI as well as tell PingAccess to bind the incoming configuration data to it.
 
 1. Define a public static nested class that extends *com.pingidentity.pa.sdk.policy.SimplePluginConfiguration*.  
@@ -57,11 +56,11 @@ Since every Rule must include at least one UI field, let's add a public String f
 
 1. Annotate the field with the *com.pingidentity.pa.sdk.ui.UIElement* annotation.  This indicates that the field will be part of the UI. 
 The *label* defines the UI label for this field.  The *type* determines what sort of UI field will be rendered. 
-The *order* defines the order of the UI Elements on the screen, since there's only one field, 0 is a perfectly fine value.
+The *order* defines the order of the UI Elements on the screen, since there's only one field, we'll use 0 for this value.
 
         @UIElement(label = "A Valid User Agent",
                 type = ConfigurationType.TEXT,
-                order=0,
+                order = 0,
                 help = @Help(title = "This is a Regex for the allowable User Agents")
         )
 
@@ -69,11 +68,11 @@ The *order* defines the order of the UI Elements on the screen, since there's on
     Annotate with *javax.validation.constraints.NotNull*, *javax.validation.constraints.Size* and the included annotation  *com.pingidentity.pa.sample.Regex*.
             
             @Size(min = 1, max = 256)
-            @NotNull(message="Please provide a Regex")
-            @Regex(message="Not a valid Regex")
+            @NotNull(message = "Please provide a Regex")
+            @Regex(message = "Not a valid Regex")
     
 1.  Compile and the cache the regex pattern.  In the *Configuration* class, let's define a member to cache the Pattern and 
-    a method to initialize and acquire it.  (We will call this method later and at a particular time in the life cycle.)
+    a method to initialize and acquire it.  We will call this method later and at a particular time in the life cycle.
     
             Pattern pattern;
     
@@ -84,9 +83,9 @@ The *order* defines the order of the UI Elements on the screen, since there's on
                 return pattern;
             }
 
-1.  Implement *public List<ConfigurationField> getConfigurationFields()*  This method is used to describe the UI via providing  a list of *ConfigurationField*.
+1.  Implement *public List<ConfigurationField> getConfigurationFields()*  This method is used to describe the UI by providing a *ConfigurationField* list. <JH: Verify that this change doesn't change the meaning>
     There are a couple ways to build the list, but the easiest and preferred is to use the fluent interface provided by *ConfigurationBuilder* 
-    to extract the list from the Annotated fields defined on the *Configuration* class like so: 
+    to extract the list from the Annotated fields defined on the *Configuration* class: 
          
          @Override
          public List<ConfigurationField> getConfigurationFields() {
@@ -95,25 +94,24 @@ The *order* defines the order of the UI Elements on the screen, since there's on
                 .toConfigurationFields();
          }
     
-1. Define the expected configuration.  In addition to describing the UI we need to accept configuration from the UI.  The first step is to tell the framework
+1. Define the expected configuration.  In addition to describing the UI, we need to accept configuration from the UI.  The first step is to tell the framework
 that you expect to be passed the *Configuration* object.  This is necessary because PA will try to map the information 
-provided by the UI--which arrives in the form of JSON at the Rules REST service--to whatever class you tell it to use.
+provided by the UI - which arrives in the form of JSON at the Rules REST service - to whatever class you tell it to use.
 We simply override the default *expectedConfiguration* attribute on the *Rule* annotation.
     
-        @Rule(type = "SampleRule", label = "SampleRule" , expectedConfiguration = SampleRule.Configuration.class)
+        @Rule(type = "SampleRule", label = "Sample Rule" , expectedConfiguration = SampleRule.Configuration.class)
         
 1.  To eliminate casting, we should parameterize the Rule based on the expectedConfiguration.
      
         public class SampleRule extends RuleInterceptorBase<SampleRule.Configuration>
         
-        
-1.  Now PA will render the UI with the *Configuration* class and provide the Rule with a valid instance (assuming the user 
-    submits valid data.)  Since we extended *RuleInterceptorBase* we have a default implementation of the *configure* and
-    *getConfiguration* methods.  We're going to to override the *configure* method to take advantage of the fact that it 
+1.  Now PA will render the UI with the *Configuration* class and provide the Rule with a valid instance, assuming the user 
+    submits valid data.  Since we extended *RuleInterceptorBase* we have a default implementation of the *configure* and
+    *getConfiguration* methods.  We're going to override the *configure* method to take advantage of the fact that it 
     is called exactly once before a given Rule is made available to handle requests.  This gives us a handy place to
-    call the getPattern() method on the *Configuration* object and initialize it, thereby eliminating the need to synchronize
-    around the pattern compilation to avoid race conditions. (Note that this Rule may be instantiated many times, but any given
-    instance's Configure method will only be called once.)
+    call the *getPattern()* method on the *Configuration* object and initialize it, thereby eliminating the need to synchronize
+    around the pattern compilation to avoid race conditions.  Note that this Rule may be instantiated many times, but any given
+    instance's Configure method will only be called once.
     
         @Override
         public void configure(Configuration pluginConfiguration) throws ValidationException {
@@ -121,8 +119,8 @@ We simply override the default *expectedConfiguration* attribute on the *Rule* a
             getConfiguration().getPattern();
         }
         
-1. Rules may be called upon to perform Error Handling.  This happens when one of the Rules being evaluated for a 
-    request--not necessarily this rule--throws an AccessException from its HandleRequest method.  We're choosing a simple 
+1. Rules may be called upon to perform error handling.  This happens when one of the Rules being evaluated for a 
+    request - not necessarily this rule - throws an AccessException from its HandleRequest method.  We're choosing a simple 
     implementation here.
     
         @Override
@@ -135,8 +133,8 @@ We simply override the default *expectedConfiguration* attribute on the *Rule* a
         Logger log = LoggerFactory.getLogger(SampleRule.class);
         
 1. Implement *handleRequest*.  We need to get the Header from the exchange and get the value of any "User-Agent" 
-HeaderField if it is present.  There should only be one value, so we get the last value.  Next we build a matcher from the
-compiled Pattern and see if the provided "User-Agent" header matches the provided pattern.  And we throw in a bunch of logging
+HeaderField if it is present.  There should only be one value, so we get the last value.  Next, we build a matcher from the
+compiled Pattern and see if the provided "User-Agent" header matches the provided pattern.  We also throw in a bunch of logging
 so we can see what's going on.
     
         @Override
@@ -160,9 +158,7 @@ so we can see what's going on.
 
         $ mvn package
  
-1. Copy the resultant jar from the target directory into the PingAccess *lib* folder and start PingAccess.  It's ready to use.
-        
-
+1. Copy the resultant jar from the target directory into the PingAccess *lib* folder and start PingAccess.  At this point, it's ready to use. 
 
 ## Appendix
 
@@ -170,7 +166,7 @@ so we can see what's going on.
 
 If internet access is unavailable, there are two other ways to reference the 
 PingAccess SDK.  First, once Apache Maven is installed, install the sdk into
-your local dependency repository by running the following command:  
+your local dependency repository by running the following command:  <JH: The command is missing here>
 
 Alternatively, you can update the pingaccess-sdk dependancy to point to
 the local installation.
@@ -183,8 +179,8 @@ the local installation.
         <systemPath><PATH_TO_PA_INSTALL>/lib/pingaccess-sdk-3.0.jar</systemPath>
     </dependency>
 
-With either of these options, replace <PATH_TO_PA_INSTALL> with the path to the 
-pa installation.
+With either of these options, replace `<PATH_TO_PA_INSTALL>` with the path to the 
+PA installation.
 
 ### <a name="java"></a> Java
 
@@ -192,15 +188,12 @@ http://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.h
 
 ### <a name="git"></a> git
 
-You may have used git to get access to this.  Otherwise, you can find the download here:
-
-git is available [here](http://git-scm.com/downloads)
-
+You may have used git to get access to this.  Otherwise, git is available [here](http://git-scm.com/downloads).
 
 ### <a name="apache-maven></a> Apache Maven
 
-The sample uses Apache Maven and assume that the PingAccess SDK can be
-referenced as a dependency.  They reference PingIdentity's public maven
+The sample uses Apache Maven and assumes that the PingAccess SDK can be
+referenced as a dependency.  It references PingIdentity's public maven
 repository, located at: 
 
 http://maven.pingidentity.com/release

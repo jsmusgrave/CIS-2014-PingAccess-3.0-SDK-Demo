@@ -20,8 +20,8 @@ Prerequisites
 To build this sample, you need to have the following installed:
 
 * [Maven 3.x](#apache-maven)
-* [Git 1.8.x][git]
-* [Java 7][java]
+* [Git 1.8.x](#git)
+* [Java 7](#java)
 
 Begin
 -----
@@ -184,15 +184,15 @@ the local installation.
 With either of these options, replace `<PATH_TO_PA_INSTALL>` with the path to the 
 PA installation.
 
-###  Java [java]
+###  <a name="java"></a> Java
 
 http://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.html
 
-### git [git]
+### <a name="git"></a> git
 
 You may have used git to get access to this.  Otherwise, git is available [here][git-downloads].
 
-###  <a name="apache-maven></a> Apache Maven
+###  <a name="apache-maven"></a> Apache Maven
 
 The sample uses Apache Maven and assumes that the PingAccess SDK can be
 referenced as a dependency.  It references PingIdentity's public maven

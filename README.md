@@ -19,7 +19,7 @@ Prerequisites
 -------------
 To build this sample, you need to have the following installed:
 
-* [Maven 3.x][apache-maven]
+* [Maven 3.x](#apache-maven)
 * [Git 1.8.x][git]
 * [Java 7][java]
 

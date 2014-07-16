@@ -186,7 +186,7 @@ PA installation.
 
 ###  <a name="java"></a> Java
 
-http://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.html
+You can download Java from Oracle [here][java-downloads].
 
 ### <a name="git"></a> git
 
@@ -202,6 +202,7 @@ repository, located at:
 
 Apache Maven is available [here][maven]
 
+[java-downloads]: http://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.html
 [git-downloads]: http://git-scm.com/downloads
 [maven]: http://maven.apache.org/download.html
 [CIS2014]: http://www.cloudidentitysummit.com/events/cloud-identity-summit-2014/event-summary-e09252dca9f144cbbd77691980893949.aspx

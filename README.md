@@ -32,7 +32,7 @@ Begin
 
 		$git checkout BEGIN
 
-1. Examine the Rule class.  Now we see that the Rule has been mostly blanked out.  It's just a simple Rule that extends *com.pingidentity.pa.sdk.policy.RuleInterceptorBase*.  *RuleInterceptorBase* is a simple base class - you don't have to extend it, and could merely implement the interface *com.pingidentity.pa.sdk.policy.RuleInterceptor*.  The class we are creating is named *com.pingidentity.pa.sample.SampleRule*, and has ide-generated default method implementations, which we'll revisit later. <JH: Please confirm that this rewrite is correct.>
+1. Examine the Rule class.  Now we see that the Rule has been mostly blanked out.  It's just a simple Rule that extends *com.pingidentity.pa.sdk.policy.RuleInterceptorBase*.  *RuleInterceptorBase* is a simple base class - you don't have to extend it, and could merely implement the interface *com.pingidentity.pa.sdk.policy.RuleInterceptor*.  The class we are creating is named *com.pingidentity.pa.sample.SampleRule*, and has ide-generated default method implementations, which we'll revisit later.
 
 1. Examine the Services file.  It is already defined for you, but if you needed to create one, you would create a file with the same name as the SPI interface.  For example: 
  
@@ -83,7 +83,7 @@ The *order* defines the order of the UI Elements on the screen, since there's on
                 return pattern;
             }
 
-1.  Implement *public List<ConfigurationField> getConfigurationFields()*  This method is used to describe the UI by providing a *ConfigurationField* list. <JH: Verify that this change doesn't change the meaning>
+1.  Implement *public List\<ConfigurationField\> getConfigurationFields()*  This method is used to describe the UI by providing a *ConfigurationField* list.
     There are a couple ways to build the list, but the easiest and preferred is to use the fluent interface provided by *ConfigurationBuilder* 
     to extract the list from the Annotated fields defined on the *Configuration* class: 
          
@@ -166,7 +166,9 @@ so we can see what's going on.
 
 If internet access is unavailable, there are two other ways to reference the 
 PingAccess SDK.  First, once Apache Maven is installed, install the sdk into
-your local dependency repository by running the following command:  <JH: The command is missing here>
+your local dependency repository by running the following command:
+
+   mvn install:install-file -Dfile=<PATH_TO_PA_INSTALL>/lib/pingaccess-sdk-3.0.0.jar -DgroupId=com.pingidentity.pingaccess -DartifactId=pingaccess-sdk -Dversion=3.0.0 -Dpackaging=jar
 
 Alternatively, you can update the pingaccess-sdk dependancy to point to
 the local installation.

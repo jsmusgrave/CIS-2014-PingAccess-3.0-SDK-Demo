@@ -44,7 +44,7 @@ Begin
 At a minimum, the *type* and *label* should be defined.  The *type* should be a unique String with no white space.  The *Label* 
  is the text label for the Rule.
  
-    @Rule(type = "SampleRule", label = "SampleRule") 
+      	@Rule(type = "SampleRule", label = "SampleRule") 
     
 1. Next let's start implementing methods that build the UI and accept configuration from the UI.  The easiest way to do this is to build a class and use annotations on that
 class to drive the UI as well as tell PingAccess to bind the incoming configuration data to it.
@@ -98,8 +98,10 @@ The *order* defines the order of the UI Elements on the screen, since there's on
 that you expect to be passed the *Configuration* object.  This is necessary because PA will try to map the information 
 provided by the UI - which arrives in the form of JSON at the Rules REST service - to whatever class you tell it to use.
 We simply override the default *expectedConfiguration* attribute on the *Rule* annotation.
-    
-        @Rule(type = "SampleRule", label = "Sample Rule" , expectedConfiguration = SampleRule.Configuration.class)
+
+
+      @Rule(type = "SampleRule", label = "Sample Rule" , expectedConfiguration = SampleRule.Configuration.class)
+
         
 1.  To eliminate casting, we should parameterize the Rule based on the expectedConfiguration.
      

@@ -31,11 +31,10 @@ import java.util.regex.Pattern;
 @Rule(type = "SampleRule", label = "SampleRule" , expectedConfiguration = SampleRule.Configuration.class)
 public class SampleRule extends RuleInterceptorBase<SampleRule.Configuration> {
 
-    Logger log = LoggerFactory.getLogger(SampleRule.class);
 
     @Override
     public ErrorHandlingCallback getErrorHandlingCallback() {
-        return new InternalServerErrorCallback();
+        return null;
     }
 
     @Override
@@ -49,23 +48,6 @@ public class SampleRule extends RuleInterceptorBase<SampleRule.Configuration> {
     public void configure(Configuration pluginConfiguration) throws ValidationException {
         super.configure(pluginConfiguration);
         getConfiguration().getPattern();
-    }
-
-    @Override
-    public Outcome handleRequest(Exchange exchange) throws RuntimeException, IOException, InterruptedException {
-        log.debug("Begin Handling Request");
-
-        String userAgent = exchange.getRequest().getHeader().getLastValue("User-Agent");
-
-        if (userAgent != null && getConfiguration().getPattern().matcher(userAgent).matches()) {
-            log.debug( "Found a valid user agent {} ", userAgent );
-        } else {
-            log.debug( "Found an invalid user agent {} ", userAgent );
-            throw new AccessException("No UserAgent Found.");
-        }
-
-        log.debug("Done Handling Request");
-        return Outcome.CONTINUE;
     }
 
     public static class Configuration extends SimplePluginConfiguration {

@@ -9,7 +9,7 @@ PingAccess 3.0 SDK Sample for cloudidentitysummit.com 2014.
 Overview
 --------
 This is a sample for a live code demo at [cloudidentitysummit.com 2014][CIS2014].  It uses the PingAccess SDK and 
-therefore requires access to the internet.  If you don't have internet access, but have access to the PingAccess install you can [use this alternative.][has-no-tubes]
+therefore requires access to the internet.  If you don't have internet access, but have access to the PingAccess install you can [use this alternative.](#has-no-tubes)
 
 Objective
 ---------
@@ -164,7 +164,7 @@ so we can see what's going on.
 
 ## Appendix
 
-###  No Internet Access [has-no-tubes] 
+### <a name="has-no-tubes></a> No Internet Access
 
 If internet access is unavailable, there are two other ways to reference the 
 PingAccess SDK.  First, once Apache Maven is installed, install the sdk into

@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.validation.ValidationException;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;

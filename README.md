@@ -1,9 +1,6 @@
 CIS-2014-PingAccess-3.0-SDK-Demo
 ================================
 
-IN PROGRESS, Will be complete by 7/19/2014.
-==========
-
 PingAccess 3.0 SDK Sample for cloudidentitysummit.com 2014.
 
 Overview
@@ -85,7 +82,8 @@ The *order* defines the order of the UI Elements on the screen, since there's on
 
 1.  Implement *public List\<ConfigurationField\> getConfigurationFields()*  This method is used to describe the UI by providing a *ConfigurationField* list.
     There are a couple ways to build the list, but the easiest and preferred is to use the fluent interface provided by *ConfigurationBuilder* 
-    to extract the list from the Annotated fields defined on the *Configuration* class: 
+    
+to extract the list from the Annotated fields defined on the *Configuration* class: 
          
          @Override
          public List<ConfigurationField> getConfigurationFields() {
@@ -93,6 +91,11 @@ The *order* defines the order of the UI Elements on the screen, since there's on
                 .from(Configuration.class)
                 .toConfigurationFields();
          }
+
+1. If you were stuck on this part, you can stash your changes and catch
+   up by doing a checkout of the RENDERUI branch.
+
+    	$git checkout RENDERUI
     
 1. Define the expected configuration.  In addition to describing the UI, we need to accept configuration from the UI.  The first step is to tell the framework
 that you expect to be passed the *Configuration* object.  This is necessary because PA will try to map the information 
@@ -120,6 +123,11 @@ We simply override the default *expectedConfiguration* attribute on the *Rule* a
             super.configure(pluginConfiguration);
             getConfiguration().getPattern();
         }
+
+1. If you were stuck on this part, you can stash your changes and catch
+   up by doing a checkout of the RENDERUI branch.
+
+    	$git checkout CONFIGURE
         
 1. Rules may be called upon to perform error handling.  This happens when one of the Rules being evaluated for a 
     request - not necessarily this rule - throws an AccessException from its HandleRequest method.  We're choosing a simple 
